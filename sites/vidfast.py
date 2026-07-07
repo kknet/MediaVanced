@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 '''
 Supports:
 https://vidfast.pro/
+https://vidfast.vc/
 '''
 
 class Colors:
@@ -20,16 +21,14 @@ class Colors:
 
 
 # Constants
-base_url = "https://vidfast.pro/movie/533535"
+base_url = "https://vidfast.vc/movie/533535"
 user_agent = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36"
 default_domain = '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(base_url))
 cf_worker = "https://vidfast.yogeshkumarjamre1.workers.dev"
 headers = {
     "Accept": "*/*",
     "Referer": default_domain,
-    "User-Agent": user_agent,
-    "X-Csrf-Token": "fYnO1Tza2EnFu7FiPbrOZUT59RyXCOG1",
-    "X-Requested-With": "XMLHttpRequest"
+    "User-Agent": user_agent
 }
 
 ''' Due to the complexity and size of the encryption workflow, 
@@ -64,7 +63,7 @@ response = requests.post(f'{cf_worker}/generate', json=data).json()
 servers_token = response.get('payload')
 
 # Get streaming servers
-api_servers = f"https://vidfast.pro/{static_path}/{server_path}/{servers_token}"
+api_servers = f"https://vidfast.vc/{static_path}/{server_path}/{servers_token}"
 response = requests.post(api_servers, headers=api_headers).text
 
 # Decrypt servers response
@@ -75,7 +74,7 @@ response = requests.post(f'{cf_worker}/decrypt', json=data).json().get('data')
 
 # Select a random server
 server = response[0].get('data')
-api_stream = f"https://vidfast.pro/{static_path}/{stream_path}/{server}"
+api_stream = f"https://vidfast.vc/{static_path}/{stream_path}/{server}"
 response = requests.post(api_stream, headers=api_headers).text
 
 # Decrypt stream response
